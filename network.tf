@@ -114,3 +114,4 @@ resource "azurerm_lb_rule" "webapp_lb_rule" {
   frontend_ip_configuration_name = "internal-lb-fe"
   probe_id                       = azurerm_lb_probe.webapp_probe.id
 }
+# checking format
