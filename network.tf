@@ -21,11 +21,11 @@ resource "azurerm_subnet" "subnet" {
 # create a public IP address for the load balancer
 # this will be used to access the Apache web server
 resource "azurerm_public_ip" "apache_lb_pip" {
-    name                = "ap-lb-pip"
-    location            = azurerm_resource_group.rg.location
-    resource_group_name = azurerm_resource_group.rg.name
-    allocation_method   = "Static"
-    sku                 = "Standard"
+  name                = "ap-lb-pip"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 resource "azurerm_lb" "apache_lb" {
   name                = "ap-lb"
@@ -45,21 +45,21 @@ resource "azurerm_lb_backend_address_pool" "apache_lb_backend_pool" {
 # Health probe for public LB (port80)
 resource "azurerm_lb_probe" "apache_lb_probe" {
   name                = "apache-lb-probe"
-  loadbalancer_id    = azurerm_lb.apache_lb.id
-  protocol           = "Http"
-  port               = 80
+  loadbalancer_id     = azurerm_lb.apache_lb.id
+  protocol            = "Http"
+  port                = 80
   interval_in_seconds = 15
-  number_of_probes   = 2
+  number_of_probes    = 2
 }
 #Load balancing rule for public LB (port80)
 resource "azurerm_lb_rule" "apache_lb_rule" {
-  name                = "apache-lb-rule"
-  loadbalancer_id    = azurerm_lb.apache_lb.id
-  protocol           = "Tcp"
-  frontend_port      = 80
-  backend_port       = 80
+  name                           = "apache-lb-rule"
+  loadbalancer_id                = azurerm_lb.apache_lb.id
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 80
   frontend_ip_configuration_name = "ap-lb-fe"
-  probe_id          = azurerm_lb_probe.apache_lb_probe.id
+  probe_id                       = azurerm_lb_probe.apache_lb_probe.id
 }
 # Create 2 NICs and 2 Apache VMs
 resource "azurerm_network_interface" "apache_nic" {
@@ -69,9 +69,9 @@ resource "azurerm_network_interface" "apache_nic" {
   resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
-      name                          = "apache-ip-config-${count.index}"
-      subnet_id                     = azurerm_subnet.subnet.id
-      private_ip_address_allocation = "Dynamic"
+    name                          = "apache-ip-config-${count.index}"
+    subnet_id                     = azurerm_subnet.subnet.id
+    private_ip_address_allocation = "Dynamic"
   }
 }
 # Internal Load Balancer (private-facing)
@@ -90,8 +90,8 @@ resource "azurerm_lb" "internal_lb" {
 
 # Backend pool for internal load balancer
 resource "azurerm_lb_backend_address_pool" "webapp_backend_pool" {
-  name                = "webapp-bepool"
-  loadbalancer_id     = azurerm_lb.internal_lb.id
+  name            = "webapp-bepool"
+  loadbalancer_id = azurerm_lb.internal_lb.id
 }
 
 # Health probe for internal LB (port 80)
