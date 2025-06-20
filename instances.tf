@@ -53,3 +53,4 @@ resource "azurerm_windows_virtual_machine" "webapp_vm" {
   }
   
 }
+# Triggering GitHub Actions run
