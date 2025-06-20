@@ -50,7 +50,7 @@ resource "azurerm_lb_probe" "apache_lb_probe" {
   port                = 80
   interval_in_seconds = 15
   number_of_probes    = 2
-  request_path        = "/"   # Required for HTTP probes
+  request_path        = "/" # Required for HTTP probes
 }
 #Load balancing rule for public LB (port80)
 resource "azurerm_lb_rule" "apache_lb_rule" {
@@ -115,4 +115,23 @@ resource "azurerm_lb_rule" "webapp_lb_rule" {
   frontend_ip_configuration_name = "internal-lb-fe"
   probe_id                       = azurerm_lb_probe.webapp_probe.id
 }
-# checking format
+# Each web app VM will have a NIC attached to the subnet and backend pool
+resource "azurerm_network_interface" "webapp_nic" {
+  count               = 4
+  name                = "webapp-nic-${count.index}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  ip_configuration {
+    name                          = "webapp-ip-config-${count.index}"
+    subnet_id                     = azurerm_subnet.subnet.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+# Associate each web app NIC with the internal load balancer's backend pool
+resource "azurerm_network_interface_backend_address_pool_association" "webapp_nic_lb_association" {
+  count                   = 4
+  network_interface_id    = azurerm_network_interface.webapp_nic[count.index].id
+  ip_configuration_name   = "webapp-ip-config-${count.index}"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.webapp_backend_pool.id
+}
