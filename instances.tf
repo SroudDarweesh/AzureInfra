@@ -12,8 +12,8 @@ resource "azurerm_windows_virtual_machine" "apache_vm" {
   ]
 
   os_disk {
-    name              = "apache-osdisk-${count.index}"
-    caching           = "ReadWrite"
+    name                 = "apache-osdisk-${count.index}"
+    caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
 
@@ -40,8 +40,8 @@ resource "azurerm_windows_virtual_machine" "webapp_vm" {
   ]
 
   os_disk {
-    name              = "webapp-osdisk-${count.index}"
-    caching           = "ReadWrite"
+    name                 = "webapp-osdisk-${count.index}"
+    caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
 
@@ -51,6 +51,6 @@ resource "azurerm_windows_virtual_machine" "webapp_vm" {
     sku       = "2022-Datacenter"
     version   = "latest"
   }
-  
+
 }
 # Triggering GitHub Actions run
