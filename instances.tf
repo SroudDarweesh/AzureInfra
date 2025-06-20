@@ -27,7 +27,7 @@ resource "azurerm_windows_virtual_machine" "apache_vm" {
 
 # 4 windows web app servers
 resource "azurerm_windows_virtual_machine" "webapp_vm" {
-  count               = 4
+  count               = 2
   name                = "webapp-vm-${count.index}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
